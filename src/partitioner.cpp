@@ -50,34 +50,38 @@ int partitioner::hash_partition(int num,int level){
         logger("Read file "+input_file->get_path()+". address: "+"[" +std::to_string(r.from) +","+std::to_string(r.to) +")");
         int64_t pos = r.from;
         int block_bytes = int(r.to-r.from);
-        std::map<std::string, int64_t> agg = input_file->get_agg(pos,block_bytes);
+        logger("ok");
+        std::unordered_map<std::string, int64_t> agg = input_file->get_agg(pos,block_bytes);
+        logger(std::to_string(agg.size()));
         // agg_partition[i] stores agg will write to disk on partition i
-        std::vector<std::map<std::string, int64_t>> agg_partition;
+        std::vector<std::string> partition_str;
+        for(int i=0;i<num;i++){
+            partition_str.push_back("");
+        }
         for(auto tuple: agg){
             if(stat != NULL && stat->sampled()){
-                stat->add_cnt(tuple);
+                if(stat->add_cnt(tuple))continue;
             }
-            else{
-                size_t hash_number = h(tuple.first);
-                if(level > 0){
-                    std::hash<size_t>h2;
-                    for(int i=0;i<level;i++){
-                        hash_number = h2(hash_number);
-                    }
+            size_t hash_number = h(tuple.first);
+            if(level > 0){
+                std::hash<size_t>h2;
+                for(int i=0;i<level;i++){
+                    hash_number = h2(hash_number);
                 }
-                int partition_number = hash_number%num;
-                agg_partition[partition_number].insert(tuple);
             }
+            int partition_number = hash_number%num;
+            partition_str[partition_number] += tuple.first + " " + std::to_string(tuple.second) + "\n";
         }
         logger("finish add agg to partition.");
         
-        std::map<std::string, int64_t>().swap(agg);
+        std::unordered_map<std::string, int64_t>().swap(agg);
         logger("finish release agg.");
         
         for(int i=0;i<num;i++){
             logger("Write file "+ slices_empty[i]->get_path());
-            logger(std::to_string(agg_partition[i].size()));
-            slices_empty[i]->write_agg(agg_partition[i]);
+            logger(std::to_string(partition_str[i].size()));
+            slices_empty[i]->write_str_on_end(partition_str[i]);
+            std::string().swap( partition_str[i] );
         }
         logger("finish write to disk.");
     }
@@ -96,8 +100,8 @@ int partitioner::hash_partition(int num,int level){
         }
     }
     // delete file to save disk space. (because I have only 230GB free disk on my own laptop)
-    input_file->remove_file();
-    delete input_file;
+    //input_file->remove_file();
+    //delete input_file;
     input_file = NULL;
     return slices.size();
 }

@@ -19,6 +19,7 @@ const std::string INPUT_FILE = "/Users/wenkchen/Documents/xcodeworkspace/urlquer
 const std::string INPUT_FILE_TEST = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/urls_test.txt";
 const std::string INPUT_FILE_1G = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/urls_1G.txt";
 const std::string INPUT_FILE_1G_P1 = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/urls_1G.txt_1";
+const std::string OUTPUT_FILE = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/output_topk.txt";
 const std::string WRITE_FILE_TEST = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/urls_write_test.txt";
 const std::string LOG_FILE = "/Users/wenkchen/Documents/xcodeworkspace/urlquerier/urlquerier/src/test/data/log/run.log";
 const int64_t GB = (int64_t)1024*1024*1024;

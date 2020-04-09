@@ -10,12 +10,13 @@
 #define aggregator_hpp
 #include "util/file.hpp"
 #include <stdio.h>
+#include <unordered_map>
 
 class aggregator{
 public:
     ~aggregator();
     aggregator(file* _input_file);
-    void aggregate();
+    void aggregate(int num_p);
 private:
     file* input_file;
 };

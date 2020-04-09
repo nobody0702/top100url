@@ -16,10 +16,10 @@ BOOST_AUTO_TEST_SUITE(aggregator_tests)
 
 
 BOOST_AUTO_TEST_CASE(aggregator_testaggregate){
-    clock_t start = clock();
+    /*clock_t start = clock();
     file f(INPUT_FILE_1G_P1);
     aggregator agg(&f);
-    agg.aggregate();
+    agg.aggregate();*/
 }
 
 

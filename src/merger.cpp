@@ -20,7 +20,7 @@ bool merger::merge(){
         logger("file size too large, cannot do merge in memory, please repartition or aggregate.");
         return false;
     }
-    std::map<std::string, int64_t> agg = input_file->get_file_agg();
+    std::unordered_map<std::string, int64_t> agg = input_file->get_file_agg();
     stat->merge_agg_into_topk(agg);
     return true;
 }

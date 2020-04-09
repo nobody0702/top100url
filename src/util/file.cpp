@@ -30,7 +30,7 @@ std::string file::get_path(){
 
 
 
-void file::sample_url(int n, std::map<std::string, int64_t>& ret){
+void file::sample_url(int n, std::unordered_map<std::string, int64_t>& ret){
     auto length = filesize();
     std::default_random_engine generator;
     std::uniform_int_distribution<int64_t> distr(0, (int64_t)length);
@@ -43,8 +43,8 @@ void file::sample_url(int n, std::map<std::string, int64_t>& ret){
 }
 
 
-std::map<std::string, int64_t> string_to_agg(std::string& block){
-    std::map<std::string, int64_t> agg;
+std::unordered_map<std::string, int64_t> string_to_agg(std::string& block){
+    std::unordered_map<std::string, int64_t> agg;
     agg.clear();
     int i = 0;
     while(i < block.size()){
@@ -74,7 +74,7 @@ std::map<std::string, int64_t> string_to_agg(std::string& block){
 }
 
 
-std::map<std::string,int64_t> file::get_file_agg(){
+std::unordered_map<std::string,int64_t> file::get_file_agg(){
     std::string input = get_string(0, int(filesize()));
     return string_to_agg(input);
 }
@@ -227,12 +227,12 @@ void file::mv_replace(std::string tmp_file_name){
     }
 }
 
-std::map<std::string,int64_t> file::get_agg(int64_t pos, int length){
+std::unordered_map<std::string,int64_t> file::get_agg(int64_t pos, int length){
     std::string block = get_string(pos,length);
     return string_to_agg(block);
 }
 
-void file::write_agg(std::map<std::string,int64_t> agg){
+void file::write_agg(std::unordered_map<std::string,int64_t> agg){
     std::string output = "";
     for(auto tuple: agg){
         output += tuple.first + " " + std::to_string(tuple.second) + "\n";

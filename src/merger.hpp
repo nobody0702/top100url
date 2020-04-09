@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "statistic.hpp"
 #include "util/file.hpp"
+#include <unordered_map>
 
 
 class merger{

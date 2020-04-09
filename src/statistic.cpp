@@ -20,7 +20,7 @@ statistic::statistic(file* _f, int _top_k):f(_f),top_k(_top_k){
 }
 
 void statistic::collect_sample(int sample_number){
-    std::map<std::string, int64_t> sample_agg;
+    std::unordered_map<std::string, int64_t> sample_agg;
     f->sample_url(sample_number,sample_agg);
     std::vector<std::pair<std::string, int64_t>> sorted(sample_top_k);
     partial_sort_copy(sample_agg.begin(), sample_agg.end(),
@@ -37,7 +37,7 @@ void statistic::collect_sample(int sample_number){
 }
 
 
-void statistic::merge_agg_into_topk(std::map<std::string, int64_t>& agg){
+void statistic::merge_agg_into_topk(std::unordered_map<std::string, int64_t>& agg){
     std::vector<std::pair<std::string, int64_t>> sorted(top_k);
     partial_sort_copy(agg.begin(), agg.end(),
                       sorted.begin(), sorted.end(),
@@ -59,19 +59,29 @@ void statistic::merge_sample_into_topk(){
     }
 }
 
-void statistic::add_cnt(std::pair<std::string, int64_t> url_pair){
+bool statistic::add_cnt(std::pair<std::string, int64_t> url_pair){
+    auto it = sample_map.find(url_pair.first);
+    if(it == sample_map.end()){
+        return false;
+    }
     if(sample_map[url_pair.first] == -1){
         sample_map[url_pair.first] = url_pair.second;
+        return true;
     }
     else if(sample_map[url_pair.first] > 0){
         sample_map[url_pair.first] += url_pair.second;
+        return true;
     }
+    return false;
 }
 
 bool statistic::sampled(){
     return !sample_map.empty();
 }
 
+bool statistic::sample_all_collected(){
+    return _sample_all_collected;
+}
 void statistic::set_sample_all_collected(){
     if(sampled()){
         _sample_all_collected = true;
@@ -80,11 +90,12 @@ void statistic::set_sample_all_collected(){
 
 
 void statistic::output_topk(file* f){
-    std::map<std::string, int64_t> temp_agg;
+    std::unordered_map<std::string, int64_t> temp_agg;
     while(!topk_pq.empty()){
         temp_agg.insert(topk_pq.top());
         topk_pq.pop();
     }
+    f->create_file();
     f->write_agg(temp_agg);
     for(auto tuple: temp_agg){
         topk_pq.push(tuple);

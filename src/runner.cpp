@@ -10,6 +10,7 @@
 #include "common/constant.hpp"
 #include "merger.hpp"
 #include "aggregator.hpp"
+#include "util/logger.hpp"
 
 
 runner::runner(file* _input_file, file* _out_file):input_file(_input_file),out_file(_out_file){
@@ -30,23 +31,27 @@ int upper_div(int64_t t1, int64_t t2){
 void runner::run_recursive(partitioner& p,int level){
     for(file* s: p.get_slices()){
         if(s->filesize() < AGGREGATE_BYTES){
+            logger("merge file: "+s->get_path());
             merger m(s, stat);
             m.merge();
         }
         else{
             int64_t size_before,size_after;
             do{
+                logger("aggregate file: "+s->get_path());
                 size_before = s->filesize();
                 aggregator a(s);
-                a.aggregate();
+                a.aggregate(upper_div(size_before,AGGREGATE_BYTES));
                 size_after = s->filesize();
             }
             while(size_after < size_before);
             if(s->filesize() < AGGREGATE_BYTES){
+                logger("merge file: "+s->get_path());
                 merger m(s, stat);
                 m.merge();
-                return;
+                continue;
             }
+            logger("repartition file: "+s->get_path());
             // if aggregator doesn't work, then repartition
             partitioner p_next(s);
             p_next.hash_partition(upper_div(s->filesize(),AGGREGATE_BYTES),level);
@@ -57,12 +62,19 @@ void runner::run_recursive(partitioner& p,int level){
 
 
 void runner::run(){
-    stat->collect_sample(AGGREGATE_BYTES);
+    logger("start run");
+    logger("collect sample");
+    stat->collect_sample(100*10000);
+    logger("hash partition");
     partitioner p(input_file,stat);
     p.hash_partition(upper_div(input_file->filesize(),AGGREGATE_BYTES), 0);
+    logger("merge sample into topk");
     if(stat->sample_all_collected()){
        stat->merge_sample_into_topk();
     }
+    logger("run recursive");
     run_recursive(p,1);
+    logger("output result.");
     stat->output_topk(out_file);
+    logger("finished");
 }

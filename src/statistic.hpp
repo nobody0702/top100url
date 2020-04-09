@@ -12,15 +12,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <cstring>
 #include <queue>
 
 
-struct cnt_greater {
-    template<typename T, typename U>
-    bool operator()(T const& lhs, U const& rhs) const {
-        return lhs.second > lhs.second;
+class comparedist
+{
+public:
+    bool operator()(std::pair<std::string,int64_t> n1,std::pair<std::string,int64_t> n2) {
+        return n1.second>n2.second;
     }
 };
 
@@ -28,18 +30,18 @@ class statistic{
 public:
     statistic(file* _f, int top_k);
     void collect_sample(int sample_number);
-    void add_cnt(std::pair<std::string, int64_t> url_pair);
+    bool add_cnt(std::pair<std::string, int64_t> url_pair);
     bool sampled();
     bool sample_all_collected();
     void set_sample_all_collected();
     void merge_sample_into_topk();
-    void merge_agg_into_topk(std::map<std::string, int64_t>& agg);
+    void merge_agg_into_topk(std::unordered_map<std::string, int64_t>& agg);
     void output_topk(file* f);
 private:
-    std::map<std::string,int64_t> sample_map;
+    std::unordered_map<std::string,int64_t> sample_map;
     std::priority_queue<std::pair<std::string,int64_t>,
                        std::vector<std::pair<std::string, int64_t>>,
-                       cnt_greater> topk_pq;
+                       comparedist> topk_pq;
     file* f;
     int top_k;
     int sample_top_k;

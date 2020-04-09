@@ -15,12 +15,12 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <map>
+#include <unordered_map>
 
 class file{
 public:
     file(std::string file_path);
-    void sample_url(int n, std::map<std::string, int64_t>& ret);
+    void sample_url(int n, std::unordered_map<std::string, int64_t>& ret);
     std::ifstream::pos_type filesize();
     //get string from file on position pos with length bytes
     std::string get_string(int64_t pos, int length);
@@ -37,9 +37,9 @@ public:
     //remove current file and move another temp file and replace this file.
     void mv_replace(std::string tmp_file_name);
     std::string get_file_to_string();
-    std::map<std::string,int64_t> get_agg(int64_t pos, int length);
-    void write_agg(std::map<std::string,int64_t> agg);
-    std::map<std::string,int64_t> get_file_agg();
+    std::unordered_map<std::string,int64_t> get_agg(int64_t pos, int length);
+    void write_agg(std::unordered_map<std::string,int64_t> agg);
+    std::unordered_map<std::string,int64_t> get_file_agg();
 private:
     std::string path;
 };
