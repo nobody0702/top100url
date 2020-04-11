@@ -33,7 +33,6 @@ const int LARGEST_MEMORY_BYTES = 10*1024*1024;
 const int URL_AVERAGE_BYTES = 30;
 const bool LOG_FLAG = true;
 const bool STATISTIC_FLAG = true;
-const int NUM_OF_THREAD = 16;
 const int64_t AGGREGATE_BYTES = (int64_t)300*MB;
 
 #endif /* constant_hpp */
