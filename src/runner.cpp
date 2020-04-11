@@ -30,6 +30,7 @@ int upper_div(int64_t t1, int64_t t2){
 
 void runner::run_recursive(partitioner& p,int level){
     for(file* s: p.get_slices()){
+        bool merged = false;
         if(s->filesize() < AGGREGATE_BYTES){
             logger("merge file: "+s->get_path());
             merger m(s, stat);
@@ -43,12 +44,15 @@ void runner::run_recursive(partitioner& p,int level){
                 aggregator a(s);
                 a.aggregate(upper_div(size_before,AGGREGATE_BYTES));
                 size_after = s->filesize();
+                if(size_after < AGGREGATE_BYTES){
+                    logger("merge file: "+s->get_path());
+                    merger m(s, stat);
+                    m.merge();
+                    merged = true;
+                }
             }
             while(size_after < size_before);
-            if(s->filesize() < AGGREGATE_BYTES){
-                logger("merge file: "+s->get_path());
-                merger m(s, stat);
-                m.merge();
+            if(merged){
                 continue;
             }
             logger("repartition file: "+s->get_path());

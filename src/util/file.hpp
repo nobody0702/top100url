@@ -28,17 +28,22 @@ public:
     int64_t get_next_line_pos(int64_t pos);
     //get next url from a file postion, if end of file, return "";
     std::string get_next_line(int64_t pos);
+    // write a string on the end of file
     int64_t write_str_on_end(std::string& str);
+    // rm file
     void remove_file();
-    void replace_byte(int64_t pos,char* ch);
     std::string get_path();
     void create_file();
     bool is_empty();
     //remove current file and move another temp file and replace this file.
     void mv_replace(std::string tmp_file_name);
+    //write a file and return a string
     std::string get_file_to_string();
+    //get agg from file from adress pos with length
     std::unordered_map<std::string,int64_t> get_agg(int64_t pos, int length);
+    //write agg to file
     void write_agg(std::unordered_map<std::string,int64_t> agg);
+    //get the file into agg
     std::unordered_map<std::string,int64_t> get_file_agg();
 private:
     std::string path;

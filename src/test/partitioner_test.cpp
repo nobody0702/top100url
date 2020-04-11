@@ -26,22 +26,14 @@ BOOST_AUTO_TEST_SUITE(partitioner_tests)
 
 BOOST_AUTO_TEST_CASE(partitioner_testrange_partition){
     clock_t start = clock();
-    //file f(INPUT_FILE_1G);
-    //partitioner p(&f);
-    /*p.range_partition(3);
+    file f(INPUT_FILE_TEST);
+    partitioner p(&f);
+    p.range_partition(3);
     std::vector<range> testr;
     testr.push_back(range(0,180));
     testr.push_back(range(180,346));
     testr.push_back(range(346,515));
-    BOOST_CHECK(cmp_ranges(p.get_ranges(), testr));*/
-    /*p.range_partition(100);
-    std::vector<range> ra = p.get_ranges();
-    for(range r: ra){
-        std::cout << "["<<r.from << "," << r.to <<")" << std::endl;
-        std::cout << f.get_string(r.from, 5) << std::endl;;
-    }*/
-    //p.hash_partition(4,0);
-    //std::cout << (clock() - start) * 1.0 / CLOCKS_PER_SEC * 1000 << std::endl;
+    BOOST_CHECK(cmp_ranges(p.get_ranges(), testr));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

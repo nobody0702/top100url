@@ -35,9 +35,8 @@ void file::sample_url(int n, std::unordered_map<std::string, int64_t>& ret){
     std::default_random_engine generator;
     std::uniform_int_distribution<int64_t> distr(0, (int64_t)length);
     for (int i=0; i<n; ++i) {
-        int64_t random_pos = distr(generator);
         std::string sample_url;
-        while((sample_url = get_next_line(random_pos))==""){}
+        while((sample_url = get_next_line(distr(generator)))==""){}
         ret[sample_url]++;
     }
 }
@@ -49,14 +48,14 @@ std::unordered_map<std::string, int64_t> string_to_agg(std::string& block){
     int i = 0;
     while(i < block.size()){
         std::string url = "";
-        while(block[i] != ' ' && block[i] != '\n'){
+        while(block[i] != ' ' && block[i] != '\n' && i < block.size()){
             url.push_back(block[i]);
             i++;
         }
         if(block[i] == ' '){
             int64_t num = 0;
             i++;
-            while(block[i] != '\n'){
+            while(block[i] != '\n' && i < block.size()){
                 num *= 10;
                 num += block[i]-'0';
                 i++;
@@ -64,7 +63,7 @@ std::unordered_map<std::string, int64_t> string_to_agg(std::string& block){
            agg[url]+= num;
            i++;
         }
-        else{
+        else if(block[i] == '\n'){
             agg[url]++;
             i++;
         }
@@ -202,13 +201,6 @@ bool file::is_empty(){
         return true;
     }
     return (int64_t)filesize() == 0;
-}
-
-void file::replace_byte(int64_t pos,char* ch){
-    std::ofstream of(path,std::ios::binary|std::ios::out|std::ios::in);
-    of.seekp((int64_t)pos);
-    of.write(ch,1);
-    of.close();
 }
 
 
