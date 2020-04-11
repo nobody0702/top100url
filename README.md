@@ -1,5 +1,5 @@
 # top100url
-Give a 100GB urls file, find the top 100 frequency url.
+Give a 100GB urls file, suppose you have only 1G memroy, find the top 100 frequency url.
 
 
 
