@@ -14,7 +14,6 @@ Give a 100GB urls file, suppose you have only 1G memory, find the top 100 freque
   merger can merge a file into top k heap (if file size less than AGGREGATE_BYTES = 300M).
 ## statistic:
   statistic have two elements in memory: 
-  
   1.topk_pq: one is top k heap, it stores top k (100) aggregated urls cnts; 
   
   2. sample_map: other is optional, sample map is a map stores sampled urls aggregation data,it ramdonly sample and got top k*100 frequency urls, and statistic these sampled urls in memory instead of disk. This is because sampled data with top k*100 will more likely to be top k frequency, and compute these url in memory will much faster than compute in disk.
