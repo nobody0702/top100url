@@ -43,7 +43,7 @@ Give a 100GB urls file, suppose you have only 1G memory, find the top 100 freque
        return 0;
    }
    ```
-# Runtime:
+# Test:
   enviornment: 2.4GHZ intel i9
   1G memory 8 cores
   
