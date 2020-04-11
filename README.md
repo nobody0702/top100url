@@ -9,7 +9,7 @@ Give a 100GB urls file, suppose you have only 1G memory, find the top 100 freque
   2. hash partition:
      hash partition use hash function std::hash<std::string>h to hash url and mod num_partition as partition id. repartition means partition a file that cannot merge using 1G memory, repartition hash the url one more times and get the partition id.
 ## aggregator:
-  aggregator can aggregate a file, it read file into memory range by range, and output to aggregated result to disk.
+  aggregator can aggregate a file, it read file into memory range by range, and output aggregated result to disk.
 ## merger:
   merger can merge a file into top k heap (if file size less than AGGREGATE_BYTES = 300M).
 ## statistic:
