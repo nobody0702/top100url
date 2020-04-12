@@ -44,7 +44,7 @@ Give a 100GB urls file, suppose you have only 1G memory, find the top 100 freque
    }
    ```
 # Test:
-  -enviornment: 2.4GHZ intel i9
-  -1G memory 8 cores
-  -100G file: [Run Log](https://github.com/nobody0702/top100url/blob/master/src/test/data/log/run.log)
+  - enviornment: 2.4GHZ intel i9
+  - 1G memory 8 cores
+  - 100G file: [Run Log](https://github.com/nobody0702/top100url/blob/master/src/test/data/log/run.log)
 
