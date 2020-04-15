@@ -49,6 +49,7 @@ void runner::run_recursive(partitioner& p,int level){
                     merger m(s, stat);
                     m.merge();
                     merged = true;
+                    break;
                 }
             }
             while(size_after < size_before);
